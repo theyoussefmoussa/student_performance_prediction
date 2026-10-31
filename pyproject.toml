@@ -1,7 +1,7 @@
 [project]
 name = "student-performance-prediction"
 version = "0.1.0"
-description = "Add your description here"
+description = "Student Performance Prediction"
 readme = "README.md"
 authors = [
     { name = "Youssef Moussa", email = "theyoussefmoussa@gmail.com" }
@@ -11,14 +11,11 @@ dependencies = [
     "matplotlib>=3.11.2",
     "numpy>=2.5.4",
     "pandas>=3.1.0",
+    "pyarrow>=26.0.0",
     "python-dotenv>=1.2.4",
     "scikit-learn>=1.9.1",
     "seaborn>=0.13.2",
 ]
 
-[project.scripts]
-student-performance-prediction = "student_performance_prediction:main"
-
-[build-system]
-requires = ["uv_build>=0.13.6,<0.14.0"]
-build-backend = "uv_build"
+[tool.uv]
+package = false
