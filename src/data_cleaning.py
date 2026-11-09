@@ -22,16 +22,12 @@ def data_cleaning():
     for col in binary_cols:
         df[col] = df[col].astype('bool')
 
-    # Class -> category, Parental_Education -> one-hot (first category dropped)
-    df['Class'] = df['Class'].astype('category')
-    df = pd.get_dummies(df, columns=['Parental_Education'], prefix='Parent_Education', drop_first=True)
-
     # encode target: Fail = 0, Pass = 1
     le = LabelEncoder()
     df['Pass_Fail'] = le.fit_transform(df['Pass_Fail'])
 
     # change to uint8
-    uint8_cols = ['Age', 'Attendance_Percentage', 'Pass_Fail']
+    uint8_cols = ['Age', 'Attendance_Percentage', 'Pass_Fail', 'Class']
     for col in uint8_cols:
         df[col] = df[col].astype('uint8')
 
@@ -43,6 +39,6 @@ def data_cleaning():
     print(f"Data shape after cleaning: {df.shape}")
 
     # save new dataset
-    df.to_parquet(f"{PROJECT_ROOT}/data/processed/student_performance_cleaned.parquet")
+    df.to_parquet(f"{PROJECT_ROOT}/data/processed/student_performance_cleaned.parquet", engine='pyarrow', index=False)
     print("Cleaned data saved to parquet file.")
     return df
