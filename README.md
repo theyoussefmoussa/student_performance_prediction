@@ -33,22 +33,23 @@ The raw dataset (`data/raw/student_performance_data.csv`) contains **5,000 stude
 | Scores | `Math_Score`, `Science_Score`, `English_Score`, `Previous_Year_Score` |
 | Targets | `Final_Percentage`, `Performance_Level`, `Pass_Fail` |
 
-The cleaned version (5,000 rows, 11 columns) is saved as `data/processed/student_performance_cleaned.parquet` and is the input for the EDA and modeling phases. See [`data_cleaning.md`](data_cleaning.md) for how it was produced.
+The cleaned version (5,000 rows, 10 columns) is saved as `data/processed/student_performance_cleaned.parquet` and is the input for the EDA and modeling phases. See [`docs/data_cleaning.md`](docs/data_cleaning.md) for how it was produced.
 
-See [`columns.md`](columns.md) for the full data dictionary: dtypes, categories, value counts, roles, and descriptions.
+See [`docs/columns.md`](docs/columns.md) for the full data dictionary: dtypes, categories, value counts, roles, and descriptions.
 
 ---
 
 ## Project Phases
 
-`Data Understanding` → `Data Cleaning & Preprocessing` → `EDA` → `Modeling`
+`Data Understanding` → `Data Cleaning & Preprocessing` → `Univariate Analysis` → `Bivariate & Multivariate Analysis` → `Modeling`
 
 | # | Phase | Status | Deliverable |
 |---|-------|--------|-------------|
-| 1 | Data Understanding | ✅ Done | `notebooks/1_data_understanding.ipynb`, `columns.md` |
-| 2 | Data Cleaning & Preprocessing | ✅ Done | `notebooks/2_data_cleaning.ipynb`, `src/data_cleaning.py`, `data_cleaning.md`, `data/processed/student_performance_cleaned.parquet` |
-| 3 | EDA | ⏳ Pending | EDA notebook |
-| 4 | Modeling | ⏳ Pending | Trained models and evaluation |
+| 1 | Data Understanding | Done | `notebooks/1_data_understanding.ipynb`, `docs/columns.md` |
+| 2 | Data Cleaning & Preprocessing | Done | `notebooks/2_data_cleaning.ipynb`, `src/data_cleaning.py`, `docs/data_cleaning.md`, `data/processed/student_performance_cleaned.parquet` |
+| 3 | Univariate Analysis | Done | `notebooks/3_univariate_analysis.ipynb`, `docs/univariate_analysis.md` |
+| 4 | Bivariate & Multivariate Analysis | Pending | EDA notebook |
+| 5 | Modeling | Pending | Trained models and evaluation |
 
 ---
 
@@ -63,23 +64,30 @@ student_performance_prediction/
 │   │   └── student_performance_data.csv
 │   └── processed/
 │       └── student_performance_cleaned.parquet
+├── docs/
+│   ├── columns.md
+│   ├── data_cleaning.md
+│   ├── setup.md
+│   └── univariate_analysis.md
 ├── notebooks/
 │   ├── 1_data_understanding.ipynb
-│   └── 2_data_cleaning.ipynb
+│   ├── 2_data_cleaning.ipynb
+│   └── 3_univariate_analysis.ipynb
 ├── src/
 │   └── data_cleaning.py
+│   └── univariate_analysis.py
+├── utils/
+│   ├── visualize_helper.py
 ├── .gitignore
-├── columns.md
-├── data_cleaning.md
-├── main.py
-└── setup.md
+├── README.md
+└── main.py
 ```
 
 ---
 
 ## Getting Started
 
-To run the project on your machine, follow the step-by-step guide in [`setup.md`](setup.md). It covers **Linux** and **Windows (CMD)**.
+To run the project on your machine, follow the step-by-step guide in [`docs/setup.md`](docs/setup.md). It covers **Linux** and **Windows (CMD)**.
 
 ---
 

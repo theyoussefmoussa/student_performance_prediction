@@ -5,7 +5,7 @@ This document describes what was done in the **Data Cleaning & Preprocessing** p
 | | |
 |---|---|
 | **Input** | `data/raw/student_performance_data.csv` (5,000 rows, 16 columns) |
-| **Output** | `data/processed/student_performance_cleaned.parquet` (5,000 rows, 11 columns) |
+| **Output** | `data/processed/student_performance_cleaned.parquet` (5,000 rows, 10 columns) |
 | **Script** | `src/data_cleaning.py` (function `data_cleaning()`) |
 | **Notebook** | `notebooks/2_data_cleaning.ipynb` |
 
@@ -29,14 +29,13 @@ Smaller and more specific datatypes reduce memory usage and make the meaning of 
 |--------|--------|-------|--------|
 | `Age` | int64 | uint8 | Values range from 14 to 19, which fits in 0 to 255 |
 | `Attendance_Percentage` | int64 | uint8 | Percentage values fit in 0 to 255 |
+| `Class` | int64 | uint8 | Grade levels (9 to 12) fit in 0 to 255. Stored as `uint8` instead of `category` because the category dtype was not preserved when reading the parquet file |
 | `Pass_Fail` | str | uint8 | Target encoded as `Fail` = 0, `Pass` = 1 |
 | `Gender` | str | `Is_Male` (uint8) | Binary column: `Male` = 1, `Female` = 0. `Gender` is dropped after the new column is created |
 | `Internet_Access` | str | bool | Binary column: `Yes` = True, `No` = False |
 | `Extracurricular_Activities` | str | bool | Binary column: `Yes` = True, `No` = False |
-| `Class` | int64 | category | Grade levels (9 to 12) are treated as plain classes, not quantities |
-| `Parental_Education` | str | one-hot columns | Encoded with `drop_first=True` into `Parent_Education_High School` and `Parent_Education_Postgraduate`. `Graduate` is the baseline (all zeros), which avoids redundant columns |
 
-Columns left unchanged: `Study_Hours_Per_Day` (float64) and `Previous_Year_Score` (int64).
+Columns left unchanged: `Study_Hours_Per_Day` (float64), `Previous_Year_Score` (int64) and `Parental_Education` (str).
 
 ---
 
@@ -60,32 +59,24 @@ The cleaned dataset is saved to `data/processed/student_performance_cleaned.parq
 
 Parquet is used instead of CSV because it keeps the datatypes from step 1 (`uint8` and `bool`). A CSV file would lose them and they would need to be converted again on every load.
 
-**Note:** `Class` is a category with integer values (9 to 12), and it can come back as `int64` when the parquet file is read (seen with pandas 3.0.2 and pyarrow 26.0.0). After loading, convert it again:
-
-```python
-df = pd.read_parquet("data/processed/student_performance_cleaned.parquet")
-df['Class'] = df['Class'].astype('category')
-```
-
 ---
 
 ## Final Schema
 
-The cleaned dataset has **5,000 rows** and **11 columns**:
+The cleaned dataset has **5,000 rows** and **10 columns**:
 
 | # | Column | Dtype | Role |
 |---|--------|-------|------|
 | 1 | `Age` | uint8 | Feature |
-| 2 | `Class` | category | Feature |
+| 2 | `Class` | uint8 | Feature |
 | 3 | `Study_Hours_Per_Day` | float64 | Feature |
 | 4 | `Attendance_Percentage` | uint8 | Feature |
 | 5 | `Internet_Access` | bool | Feature |
 | 6 | `Extracurricular_Activities` | bool | Feature |
-| 7 | `Previous_Year_Score` | int64 | Feature |
-| 8 | `Pass_Fail` | uint8 | Target |
-| 9 | `Is_Male` | uint8 | Feature |
-| 10 | `Parent_Education_High School` | bool | Feature |
-| 11 | `Parent_Education_Postgraduate` | bool | Feature |
+| 7 | `Parental_Education` | str | Feature |
+| 8 | `Previous_Year_Score` | int64 | Feature |
+| 9 | `Pass_Fail` | uint8 | Target |
+| 10 | `Is_Male` | uint8 | Feature |
 
 ---
 
